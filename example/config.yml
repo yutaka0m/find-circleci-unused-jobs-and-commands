@@ -1,0 +1,58 @@
+version: 2.1
+
+executors:
+  test:
+    working_directory: ~/repo
+    docker:
+      - image: cimg/node:18.12.1
+
+commands:
+  use_command_1:
+    parameters:
+      test:
+        type: boolean
+    steps:
+      - checkout
+
+  use_command_2:
+    steps:
+      - checkout
+      - use_command_3:
+          test: true
+
+  use_command_3:
+    parameters:
+      test:
+        type: boolean
+    steps:
+      - checkout
+
+  not_use_command_1:
+    steps:
+      - checkout
+
+jobs:
+  not_use_job_1:
+    executor: test
+    steps:
+      - use_command_1:
+          test: true
+      - use_command_2
+
+  use_job_1:
+    executor: test
+    steps:
+      - use_command_1:
+          test: true
+      - use_command_2
+
+workflows:
+  version: 2
+  apps_build_and_test:
+    jobs:
+      - use_job_1:
+          filters:
+            branches:
+              ignore:
+                - main
+      - use_job_2
