@@ -50,8 +50,14 @@ def find_unused_jobs_and_commands(config_path):
 
     not_used_jobs = job_in_jobs - jobs_in_workflows
     not_used_commands = command_in_commands - commands_in_jobs - commands_in_commands
-    print(f"not_used_jobs: {not_used_jobs}")
-    print(f"not_used_commands: {not_used_commands}")
+
+    print("Unused jobs:")
+    for job in not_used_jobs:
+        print(f"  - {job}")
+
+    print("Unused command:")
+    for command in not_used_commands:
+        print(f"  - {command}")
 
 
 def parse_arguments():
